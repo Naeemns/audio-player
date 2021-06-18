@@ -3,3 +3,47 @@
     margin: 0;
     box-sizing: border-box;
 }
+
+body {
+    background-color: #d0bc9d;
+
+}
+
+h1 {
+    color: #850018;
+    font-size: 40px;
+    margin: 15px 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.canvas {
+    cursor: pointer;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #850018;
+    border-radius: 50px;
+    /* background: #d0bc9d;
+    box-shadow: inset 20px 20px 60px #b1a085,
+        inset -20px -20px 60px #efd8b5; */
+}
+
+.play-button {
+    padding: 10px 35px;
+    font-size: 20px;
+    background-color: #850018;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.play-button:hover {
+    background-color: #921b31;
+}

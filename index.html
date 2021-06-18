@@ -5,17 +5,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css">
     <link rel="stylesheet" href="./style.css">
     <title>Audio Player</title>
 </head>
 
 <body>
     <div class="container">
-        <canvas id="canvas" class="canvas" width="1000px" height="500px"></canvas>
+        <h1>Audio Player</h1>
+        <canvas id="canvas" class="canvas" width="1000px" height="400px"></canvas>
         <audio src="./audio/three.mp3" id="audio">
             Your browser does not support the audio element.
         </audio>
-        <button class="play-button" id="play-button">Play</button>
+        <button class="play-button" id="play-button">
+            <i class="fas fa-play"></i>
+        </button>
     </div>
 
     <script src="./script.js"></script>

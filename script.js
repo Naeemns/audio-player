@@ -1,52 +1,132 @@
+const container = document.querySelector(".container");
 const audio = document.getElementById("audio");
 const playButton = document.getElementById("play-button");
-let canvas = document.getElementById("canvas")
-let ctx = canvas.getContext("2d");
+const icon = document.querySelector(".fas");
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 let isPlaying = false;
-let array = randomGenerator();
-var originalFill;
+let originalFill;
 let previousPercentage = 0;
 
+// Storing the positions of rectangle bars;
+let array = randomCoordinatesGenerator();
+let offset = (container.clientWidth - 1000) / 2;
 
-// ctx.translate(0, -250);
-
-
-function drawNewCanvas(percentage) {
-    console.log(percentage)
-    for (let i = 0; i < previousPercentage; i++) {
-        ctx.fillStyle = originalFill;
-        ctx.fillRect(array[i][0], array[i][1], 5, array[i][2]);
+const tags = [{
+        text: "Introduction",
+        fill: "green",
+        x: 182.5,
+        y: 350,
+        rectWidth: 100,
+        rectHeight: 25,
+        lineTo: {
+            x: 182.5,
+            y: 210
+        }
+    },
+    {
+        text: "one_six",
+        fill: "crimson",
+        x: 352.5,
+        y: 350,
+        rectWidth: 100,
+        rectHeight: 25,
+        lineTo: {
+            x: 352.5,
+            y: 180
+        }
+    },
+    {
+        text: "Profile",
+        fill: "blue",
+        x: 652.5,
+        y: 350,
+        rectWidth: 100,
+        rectHeight: 25,
+        lineTo: {
+            x: 652.5,
+            y: 240
+        }
+    },
+    {
+        text: "RapportBuilding - Empathy",
+        fill: "brown",
+        x: 752.5,
+        y: 350,
+        rectWidth: 155,
+        rectHeight: 25,
+        lineTo: {
+            x: 752.5,
+            y: 210
+        }
+    },
+    {
+        text: "RapportBuilding - Energy",
+        fill: "black",
+        x: 852.5,
+        y: 350,
+        rectWidth: 150,
+        rectHeight: 25,
+        lineTo: {
+            x: 852.5,
+            y: 180
+        }
     }
+]
 
-    for (let i = 0; i < percentage; i++) {
-        ctx.fillStyle = "black";
-        ctx.fillRect(array[i][0], array[i][1], 5, array[i][2]);
-    }
-    previousPercentage = percentage;
-}
+ctx.translate(0, -150);
 
 function draw() {
     for (let i = 0; i < array.length; i++) {
-        ctx.fillStyle = "#b9b9b9";
+        ctx.fillStyle = "white";
         ctx.fillRect(array[i][0], array[i][1], 5, array[i][2]);
     }
-    originalFill = ctx.fillStyle
+    originalFill = ctx.fillStyle;
+    drawTags();
 }
 
 draw();
 
+function drawTags() {
+    ctx.lineWidth = 1;
+    for (let i = 0; i < tags.length; i++) {
+        ctx.fillStyle = tags[i].fill;
+        ctx.strokeStyle = tags[i].fill;
+        ctx.font = "13px serif";
+        ctx.beginPath();
+        ctx.arc(tags[i].x, tags[i].y, 6, 0, Math.PI * 2, false);
+        ctx.fill();
+        ctx.moveTo(tags[i].x, tags[i].y);
+        ctx.lineTo(tags[i].lineTo.x, tags[i].lineTo.y);
+        ctx.stroke();
+        ctx.moveTo(tags[i].lineTo.x - (tags[i].rectWidth / 2), tags[i].lineTo.y);
+        ctx.fillRect(tags[i].lineTo.x - (tags[i].rectWidth / 2), tags[i].lineTo.y, tags[i].rectWidth, tags[i].rectHeight);
+        ctx.fillStyle = "white";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(tags[i].text, tags[i].lineTo.x, tags[i].lineTo.y + (tags[i].rectHeight / 2))
+        ctx.moveTo(tags[i + 1].x, tags[i + 1].y);
+    }
+}
 
-function randomGenerator() {
-    let x = 10;
+function randomCoordinatesGenerator() {
+    let x = 0;
     let array = [];
     for (let i = 0; i < 100; i++) {
-        let randomNumber = getRandomInt(50, 250);
-        array.push([x, canvas.clientHeight - randomNumber, randomNumber])
+        let randomNumber = getRandomInt(-150, 150);
+        // Making sure that the bar length is above 30px
+        while ((randomNumber > -30 && randomNumber <= 0) || (randomNumber < 30 && randomNumber >= 0)) {
+            randomNumber = getRandomInt(-150, 150);
+        }
+        let y = randomNumber < 0 ? canvas.clientHeight - randomNumber - (-randomNumber / 2) : canvas.clientHeight - randomNumber;
+        // Pushing the x, y coordinates and height of the rectangle bar
+        array.push([x, y, randomNumber])
+        // Moving x coordinate by width of current bar + distance between two bars (5+5)
         x += 5 + 5;
     }
     return array;
 }
-
 
 function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -54,6 +134,25 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
+function drawNewCanvas(percentage) {
+    // Clearing the previous bars and drawing initial bars
+    for (let i = 0; i <= previousPercentage; i++) {
+        ctx.fillStyle = originalFill;
+        ctx.clearRect(array[i][0], array[i][1], 5, array[i][2]);
+        ctx.fillRect(array[i][0], array[i][1], 5, array[i][2]);
+    }
+
+    // Clearing the initial bars and drawing colored bars
+    for (let i = 0; i <= percentage; i++) {
+        ctx.fillStyle = "#850018";
+        ctx.clearRect(array[i][0], array[i][1], 5, array[i][2]);
+        ctx.fillRect(array[i][0], array[i][1], 5, array[i][2]);
+    }
+
+    previousPercentage = percentage;
+}
+
+// Event listeners
 canvas.addEventListener("click", (e) => {
     if (!isPlaying) return;
     let {
@@ -62,24 +161,25 @@ canvas.addEventListener("click", (e) => {
     let {
         duration
     } = audio;
-    let percentage = Math.floor(clientX / 10);
-    audio.currentTime = Math.floor((clientX / 1000) * duration);
+    let percentage = Math.floor((clientX - offset) / 10);
+    audio.currentTime = Math.floor(((clientX - offset) / 1000) * duration);
     drawNewCanvas(percentage)
 })
 
-
+// Clicking on play or pause button
 playButton.addEventListener("click", () => {
     if (isPlaying) {
         audio.pause();
-        // moveCanvas();
         isPlaying = false;
+        icon.classList.replace("fa-pause", "fa-play");
     } else {
         audio.play();
         isPlaying = true;
+        icon.classList.replace("fa-play", "fa-pause");
     }
 })
 
-
+// When there is update in the time
 audio.addEventListener("timeupdate", () => {
     let {
         duration,
@@ -87,7 +187,8 @@ audio.addEventListener("timeupdate", () => {
     } = audio;
     let percentage = Math.floor((currentTime / duration) * 100);
     if (duration === currentTime) {
-        isPlaying = false
-    };
+        isPlaying = false;
+        icon.classList.replace("fa-pause", "fa-play");
+    }
     drawNewCanvas(percentage);
 })
