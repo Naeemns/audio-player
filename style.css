@@ -6,7 +6,6 @@
 
 body {
     background-color: #d0bc9d;
-
 }
 
 h1 {
@@ -28,9 +27,11 @@ h1 {
     padding: 10px;
     border: 1px solid #850018;
     border-radius: 50px;
-    /* background: #d0bc9d;
-    box-shadow: inset 20px 20px 60px #b1a085,
-        inset -20px -20px 60px #efd8b5; */
+    visibility: hidden;
+}
+
+.container-controls {
+    visibility: hidden;
 }
 
 .play-button {
@@ -46,4 +47,16 @@ h1 {
 
 .play-button:hover {
     background-color: #921b31;
+}
+
+.fa-spinner {
+    color: #850018;
+    font-size: 40px;
+    animation: rotate 1s infinite linear;
+}
+
+@keyframes rotate {
+    to {
+        transform: rotateZ(360deg);
+    }
 }
