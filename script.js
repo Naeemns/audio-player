@@ -178,8 +178,8 @@ canvas.addEventListener("click", (e) => {
     let {
         duration
     } = audio;
-    let percentage = Math.floor((clientX - offset) / 10);
-    audio.currentTime = Math.floor(((clientX - offset) / 1000) * duration);
+    let percentage = (clientX - offset) / 10;
+    audio.currentTime = ((clientX - offset) / 1000) * duration;
     drawNewCanvas(percentage)
 })
 
@@ -202,7 +202,7 @@ audio.addEventListener("timeupdate", () => {
         duration,
         currentTime
     } = audio;
-    let percentage = Math.floor((currentTime / duration) * 100);
+    let percentage = (currentTime / duration) * 100;
     if (duration === currentTime) {
         isPlaying = false;
         icon.classList.replace("fa-pause", "fa-play");
